@@ -90,6 +90,7 @@ def temp_game():
                     elif player_turn == 1:
                         print(f"It's {player2}'s turn.")
                         desired_row = (connection.recv(1024)).decode("utf-8")
+                        if len(desired_row) == 0: return True
                     if (desired_row == "A") or (desired_row == "B") or (desired_row == "C") or (desired_row == "D") or (desired_row == "E") or (desired_row == "F") or (desired_row == "G"):
                         break
                     else:
@@ -219,7 +220,9 @@ def temp_game():
         if win_check() or draw_check():
             host.close()
             break
-        moves2()
+        if moves2(): 
+            print(f"{player2} disconnected.")
+            break
 
 def game():
     while True:

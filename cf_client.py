@@ -64,6 +64,7 @@ def temp_game():
                     if player_turn == 0:
                         print(f"It is {player1}'s turn.")
                         desired_row = (client.recv(1024)).decode("utf-8")
+                        if len(desired_row) == 0: return True
                     elif player_turn == 1:
                         desired_row = (input(f"Which row does the {player2} want to go in?")).upper()
                         client.sendall(bytes(desired_row, "utf-8"))
@@ -196,7 +197,9 @@ def temp_game():
         if win_check() or draw_check():
             client.close()
             break
-        moves2()
+        if moves2():
+            print(f"{player1} disconnected.")
+            break
 
 def game():
     while True:
