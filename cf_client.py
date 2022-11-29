@@ -4,15 +4,24 @@ def temp_game():
 
     from update_stats import update_stats
 
+    socket.setdefaulttimeout(45000)
+
     player2 = input("What is your name? ")
     #Initializing the client
-    host_ip = input("What is the host IP?")
-    host_port = int(input("What is the host port?"))
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print("...Connecting...")
-    client.connect((host_ip, host_port))
-    print("Connected Successfully!")
+    while True:
+        host_ip = input("What is the host IP?")
+        host_port = int(input("What is the host port?"))
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("...Connecting...")
+        try:
+            client.connect((host_ip, host_port))
+            print("Connected Successfully!")
+            break
+        except:
+            print("Host tool too long to respond. Please check the IP and Port and try again.")
+
     #Client Initialized
+    socket.setdefaulttimeout(None)
     player1 = client.recv(1024)
     player1 = player1.decode()
     print(f"Playing against: {player1}")

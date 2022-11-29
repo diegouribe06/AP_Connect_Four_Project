@@ -21,13 +21,18 @@ def temp_game():
     host = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print(f"Give this IP to the other player: {host_ip}")
     while True:
-        port = int(input("Choose a port: (Number between 1024 and 65536) "))
-        if port > 1024 and port < 65536:
+        while True:
+            port = int(input("Choose a port: (Number between 1024 and 65536) "))
+            if port > 1024 and port < 65536:
+                break
+            else:
+                print("Please select a valid port number.")
+        try:
+            host.bind((host_ip, port))
             break
-        else:
-            print("Please select a valid port number.")
-        
-    host.bind((host_ip, port))
+        except:
+            print("The port is currently in use. Please select another port.")
+            
     print("...Connecting...")
     host.listen()
     connection, address = host.accept()
