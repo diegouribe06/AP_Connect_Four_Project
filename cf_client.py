@@ -18,7 +18,7 @@ def temp_game():
             print("Connected Successfully!")
             break
         except:
-            print("Host tool too long to respond. Please check the IP and Port and try again.")
+            print("Host took too long to respond. Please check the IP and Port and try again.")
 
     #Client Initialized
     socket.setdefaulttimeout(None)
