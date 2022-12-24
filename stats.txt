@@ -1,2 +1,2 @@
-0 won
-0 lost
+0 wins
+0 losses
