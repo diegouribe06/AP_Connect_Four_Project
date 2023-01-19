@@ -1,2 +1,4 @@
 *.pyc
 *.vscode
+stats.txt
+text_test.py

@@ -2,14 +2,50 @@ import copy
 import pygame
 from update_stats import update_stats
 
-pygame.init()
+#pygame.init()
 # Alt + Z turns text wrap on and off. Use this to make the comments easier to read since python does not support multi-line comments.
-#IDEA
-#Make the circles always there, but black, and get the color values from the moves2 and get_grid functions.
-# Chips will be 100 * 100
-# Lines are currently 20 thick
-player1 = input("Player 1: ")
-player2 = input("Player 2: ")
+
+#player1 = ''
+#player2 = ''
+#scaling = ''
+
+def getText(message = "", color = (255,0,0)):
+    pygame.init()
+    text_screen = pygame.display.set_mode([300, 300])
+    font = pygame.font.SysFont("comic_sans_ms", 25)
+    text = ""
+    text_bar = pygame.Rect(0, 250, 300, 100)
+    message_bar = pygame.Rect(100, 50, 100, 25)
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE:
+                    text = text[:-1]
+                elif event.key == pygame.K_RETURN:
+                    running = False
+                    pygame.quit()
+                    return text
+                else:
+                    text += event.unicode
+
+        text_screen.fill((0,0,0))
+        pygame.draw.rect(text_screen, color, text_bar)
+        text_surface = font.render(text, True, (255, 255, 255))
+        text_screen.blit(text_surface, (text_bar.x, text_bar.y))
+        #text_bar.w = max(100, text_surface.get_width() + 10)
+
+        pygame.draw.rect(text_screen, color, message_bar)
+        message_surface = font.render(message, True, (255,255,255))
+        text_screen.blit(message_surface, (100, 50))
+        
+        pygame.display.flip()
+
+player1 = getText("Player 1:")
+player2 = getText("Player 2:", (0, 255, 0))
 player_turn = 0
 text = f"{player1}'s Turn"
 
@@ -27,7 +63,7 @@ row_g = {1:blank, 2:blank, 3:blank, 4:blank, 5:blank, 6:blank}
 
 #Scaling
 while True:
-    scaling = round(float(input("Enter the scale factor. If the game does not need to be up/downscaled enter 1.")))
+    scaling = round(float(getText("Scale: ", (0, 0, 255))))
     if isinstance(scaling, int):
         break
     else:
@@ -35,7 +71,7 @@ while True:
 
 max_height = 300 * scaling
 max_width = 350 * scaling
-
+pygame.init()
 font = pygame.font.SysFont("comic_sans_ms", 25 * scaling)
 
 running = True
@@ -102,7 +138,7 @@ def draw_check():
             for spot in row:
                 if row[spot] == blank:
                     return False
-        text = "It's a tie!"
+        text = "   It's a tie!    "
         return True
 
 def win_check():
@@ -189,12 +225,14 @@ def win_check():
                     text = (f'{player2} Wins!')
                     update_stats("lose")
                     return True
+
 win = False
+
 while running:
     if win:
         message = font.render(text, True, (255, 255, 255), (0, 0, 0))
         message_rect = message.get_rect()
-        message_rect.center = (max_width / 2, (max_height + 25) * scaling)
+        message_rect.center = (((max_width / 2)), (max_height + 25 * scaling))
         screen.blit(message, message_rect)
         pygame.display.flip()
         pygame.time.wait(5000)
@@ -205,7 +243,7 @@ while running:
 
     message = font.render(text, True, (255, 255, 255), (0, 0, 0))
     message_rect = message.get_rect()
-    message_rect.center = (max_width / 2, (max_height + 25) * scaling)
+    message_rect.center = (((max_width / 2)), (max_height + 25 * scaling))
     screen.blit(message, message_rect)
 
     for event in pygame.event.get():
