@@ -96,7 +96,6 @@ player2 = player2.decode("utf-8")
 getText(f"Playing against {player2}")
 
 
-
 blank = (0,0,0)
 yellow = (255, 255, 0)
 red = (255, 0, 0)
@@ -296,6 +295,7 @@ while running:
     screen.blit(message, message_rect)
 
     if player_turn == 0:
+        text = f"{player2}'s turn"
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -308,9 +308,8 @@ while running:
                     #text = (get_grid())
                 counter += 50 * scaling
     elif player_turn == 1:
+        text = f"{player1}'s turn"
         moves2(int((connection.recv(1024)).decode("utf-8")))
-#the current bug is happening because the moves function is only called on clicks. it needs to be changed based off of player turn to check if information has been sent or recieved.
-
 
     tracker = 50 * scaling
     for i in range(6):

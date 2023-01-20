@@ -59,7 +59,7 @@ while True:
 
 while True:
     host_ip = getText("What is the host IP?")
-    host_port = (getText("What is the host port?"))
+    host_port = int(getText("What is the host port?"))
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #print("...Connecting...")
     try:
@@ -74,7 +74,7 @@ socket.setdefaulttimeout(None)
 #Initializing the server
 player1 = client.recv(1024)
 player1 = player1.decode()
-print(f"Playing against: {player1}")
+getText(f"Playing against: {player1}")
 client.sendall(bytes(player2, "utf-8"))
 
 player_turn = 0
