@@ -59,7 +59,7 @@ while True:
 
 while True:
     host_ip = getText("What is the host IP?")
-    host_port = int(getText("What is the host port?"))
+    host_port = (getText("What is the host port?"))
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #print("...Connecting...")
     try:
@@ -125,10 +125,11 @@ def moves2(row):
             while True:
                 if player_turn == 0:
                     text = f'{player2}\'s turn'
-                    desired_row = (client.recv(1024)).decode("utf-8")
+                    desired_row = row
                 elif player_turn == 1:
                     text = f'{player1}\'s turn'
                     desired_row = row
+                    client.sendall(bytes(str(desired_row), "utf-8"))
                 if (desired_row == 0) or (desired_row == 1) or (desired_row == 2) or (desired_row == 3) or (desired_row == 4) or (desired_row == 5) or (desired_row == 6):
                     break
                 else:
@@ -277,18 +278,21 @@ while running:
     message_rect = message.get_rect()
     message_rect.center = (((max_width / 2)), (max_height + 25 * scaling))
     screen.blit(message, message_rect)
+    if player_turn == 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+            counter = 0
+            for i in range(7):
+                if (event.type == pygame.MOUSEBUTTONUP) and (0 + counter < pygame.mouse.get_pos()[0] < (52 * scaling) + counter):
+                    #text = (f"click in row({i}).")
+                    moves2(i)
+                    #text = (get_grid())
+                counter += 50 * scaling
+    elif player_turn == 0:
+        moves2(int((client.recv(1024)).decode("utf-8")))
 
-        counter = 0
-        for i in range(7):
-            if (event.type == pygame.MOUSEBUTTONUP) and (0 + counter < pygame.mouse.get_pos()[0] < (52 * scaling) + counter):
-                #text = (f"click in row({i}).")
-                moves2(i)
-                #text = (get_grid())
-            counter += 50 * scaling
 
 
 

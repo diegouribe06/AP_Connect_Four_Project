@@ -142,10 +142,10 @@ def moves2(row):
                 if player_turn == 0:
                     text = f'{player2}\'s turn'
                     desired_row = row
-                    connection.sendall(bytes(desired_row, "utf-8"))
+                    connection.sendall(bytes(str(desired_row), "utf-8"))
                 elif player_turn == 1:
                     text = f'{player1}\'s turn'
-                    desired_row = (connection.recv(1024)).decode("utf-8")
+                    desired_row = row
                 if (desired_row == 0) or (desired_row == 1) or (desired_row == 2) or (desired_row == 3) or (desired_row == 4) or (desired_row == 5) or (desired_row == 6):
                     break
                 else:
@@ -295,18 +295,21 @@ while running:
     message_rect.center = (((max_width / 2)), (max_height + 25 * scaling))
     screen.blit(message, message_rect)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    if player_turn == 0:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-        counter = 0
-        for i in range(7):
-            if (event.type == pygame.MOUSEBUTTONUP) and (0 + counter < pygame.mouse.get_pos()[0] < (52 * scaling) + counter):
-                #text = (f"click in row({i}).")
-                moves2(i)
-                #text = (get_grid())
-            counter += 50 * scaling
-
+            counter = 0
+            for i in range(7):
+                if (event.type == pygame.MOUSEBUTTONUP) and (0 + counter < pygame.mouse.get_pos()[0] < (52 * scaling) + counter):
+                    #text = (f"click in row({i}).")
+                    moves2(i)
+                    #text = (get_grid())
+                counter += 50 * scaling
+    elif player_turn == 1:
+        moves2(int((host.recv(1024)).decode("utf-8")))
+#the current bug is happening because the moves function is only called on clicks. it needs to be changed based off of player turn to check if information has been sent or recieved.
 
 
     tracker = 50 * scaling
