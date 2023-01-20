@@ -1,2 +1,0 @@
-Open "Multiplayer_cf.py," as that is the actual game file. The other two files are used, as they contain the individual game modes: Local, Multiplayer Host, and Multiplayer Client. Socket, pygame, and python3 must be installed for the game to work. Multiplayer is LAN only, meaning that it will only work if both players are connected to the same wifi.
-Do not edit "stats.txt," as that would break the game by forcing the program to access indexes that cannot be converted to integers.
