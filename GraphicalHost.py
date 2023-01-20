@@ -308,7 +308,7 @@ while running:
                     #text = (get_grid())
                 counter += 50 * scaling
     elif player_turn == 1:
-        moves2(int((host.recv(1024)).decode("utf-8")))
+        moves2(int((connection.recv(1024)).decode("utf-8")))
 #the current bug is happening because the moves function is only called on clicks. it needs to be changed based off of player turn to check if information has been sent or recieved.
 
 

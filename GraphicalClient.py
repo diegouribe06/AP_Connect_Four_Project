@@ -278,6 +278,7 @@ while running:
     message_rect = message.get_rect()
     message_rect.center = (((max_width / 2)), (max_height + 25 * scaling))
     screen.blit(message, message_rect)
+    
     if player_turn == 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
