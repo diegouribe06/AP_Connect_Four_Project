@@ -48,10 +48,10 @@ player1 = getText("Player 1:")
 
 #Scaling
 while True:
-    scaling = round(float(getText("Scale: ", (0, 0, 255))))
-    if isinstance(scaling, int):
+    try:
+        scaling = round(float(getText("Scale: ", (0, 0, 255))))
         break
-    else:
+    except:
         text = ("Please enter a valid number.")
 
 temp_ip = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -295,7 +295,7 @@ while running:
     screen.blit(message, message_rect)
 
     if player_turn == 0:
-        text = f"{player2}'s turn"
+        #text = f"{player2}'s turn"
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -308,7 +308,7 @@ while running:
                     #text = (get_grid())
                 counter += 50 * scaling
     elif player_turn == 1:
-        text = f"{player1}'s turn"
+        #text = f"{player1}'s turn"
         moves2(int((connection.recv(1024)).decode("utf-8")))
 
     tracker = 50 * scaling
@@ -331,9 +331,9 @@ while running:
         h_counter += 50 * scaling
     
 
-
+    #pygame.display.flip()
 
     if draw_check() or win_check():
         win = True
-        host.close()
+        connection.close()
 pygame.quit()

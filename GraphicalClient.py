@@ -50,10 +50,10 @@ player2 = getText("Player 2:")
 
 #Scaling
 while True:
-    scaling = round(float(getText("Scale: ", (0, 0, 255))))
-    if isinstance(scaling, int):
+    try:
+        scaling = round(float(getText("Scale: ", (0, 0, 255))))
         break
-    else:
+    except:
         text = ("Please enter a valid number.")
 
 
@@ -124,10 +124,10 @@ def moves2(row):
             #Code to make sure that the player chose a valid spot to go in
             while True:
                 if player_turn == 0:
-                    text = f'{player2}\'s turn'
+                    text = f"{player2}'s turn"
                     desired_row = row
                 elif player_turn == 1:
-                    text = f'{player1}\'s turn'
+                    text = f"{player1}'s turn"
                     desired_row = row
                     client.sendall(bytes(str(desired_row), "utf-8"))
                 if (desired_row == 0) or (desired_row == 1) or (desired_row == 2) or (desired_row == 3) or (desired_row == 4) or (desired_row == 5) or (desired_row == 6):
