@@ -1,5 +1,8 @@
 import pygame
 from GraphicalClient import game as graphicalClient
+from GraphicalHost import game as graphicalHost
+from GraphicalLocal import game as graphicalLocal
+
 def getText(message = "", color = (255,0,0), xpos = 100, boxWidth = 100, boxHeight = 25):
     pygame.init()
     text_screen = pygame.display.set_mode([300, 300])
@@ -43,11 +46,11 @@ while True:
         else:
             break
     if game_mode == "LOCAL":
-        print("Run local game")
+        graphicalLocal()
     elif game_mode == "LAN":
         mode = getText("Host or Join?", xpos=75, boxHeight=40, boxWidth=160).upper()
         if mode == "HOST":
-            print("Host game mode")
+            graphicalHost()
         elif mode == "JOIN":
             graphicalClient()
     elif game_mode == "STATS":

@@ -329,7 +329,7 @@ def game():
     from GraphicalMenu import getText
     while True:
         tempGame()
-        if getText("Play Again? Y/N").upper() == "Y":
+        if getText("Play Again? (Y/N)", xpos=50, boxHeight=40, boxWidth=205).upper() == "Y":
             continue
         else:
             break
