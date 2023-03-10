@@ -1,5 +1,5 @@
 import pygame
-
+from GraphicalClient import game as graphicalClient
 def getText(message = "", color = (255,0,0), xpos = 100, boxWidth = 100, boxHeight = 25):
     pygame.init()
     text_screen = pygame.display.set_mode([300, 300])
@@ -49,7 +49,7 @@ while True:
         if mode == "HOST":
             print("Host game mode")
         elif mode == "JOIN":
-            print("Client game mode")
+            graphicalClient()
     elif game_mode == "STATS":
         print("Stats")
 
