@@ -88,8 +88,8 @@ def tempGame():
         return [row_a, row_b, row_c, row_d, row_e, row_f, row_g]
 
     def moves2(row):
-            global player_turn
-            global text
+            nonlocal player_turn
+            nonlocal text
             rows = get_grid()
             precheck = copy.deepcopy(rows)
 
@@ -132,8 +132,8 @@ def tempGame():
                     #Finally, no matter the turn, if the algorithm reaches the end, it'll ask the player to choose a different row since the chosen one is full.
 
     def draw_check():
-            global row_a, row_b, row_c, row_d, row_e, row_f, row_g, blank
-            global text
+            nonlocal row_a, row_b, row_c, row_d, row_e, row_f, row_g, blank
+            nonlocal text
             rows = [row_a, row_b, row_c, row_d, row_e, row_f, row_g]
             for row in rows:
                 for spot in row:
@@ -143,10 +143,11 @@ def tempGame():
             return True
 
     def win_check():
-            global player_turn
-            global text
+            nonlocal player_turn
+            nonlocal text
             #Vertical checking from down up, and left to right
             def update_rows(r = True): #Used to make sure that the rows in the function are accurate.
+                nonlocal row_a, row_b, row_c, row_d, row_e, row_f, row_g
                 rows = [row_a, row_b, row_c, row_d, row_e, row_f, row_g]
                 if r == True:
                     return rows
