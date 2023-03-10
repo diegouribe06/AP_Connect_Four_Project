@@ -1,0 +1,1 @@
+from VisualText import getText
