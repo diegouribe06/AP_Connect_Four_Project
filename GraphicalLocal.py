@@ -1,6 +1,7 @@
 import copy
 import pygame
 from update_stats import update_stats
+from update_stats import getText
 
 #pygame.init()
 # Alt + Z turns text wrap on and off. Use this to make the comments easier to read since python does not support multi-line comments.
@@ -290,7 +291,6 @@ def tempGame():
 
 def game():
     import pygame
-    from GraphicalMenu import getText
     while True:
         tempGame()
         if getText("Play Again? (Y/N)", xpos=50, boxHeight=40, boxWidth=205).upper() == "Y":
