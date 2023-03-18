@@ -3,6 +3,7 @@ from GraphicalClient import game as graphicalClient
 from GraphicalHost import game as graphicalHost
 from GraphicalLocal import game as graphicalLocal
 from update_stats import getText
+from update_stats import show_stats
 
 while True:
     while True:
@@ -20,7 +21,7 @@ while True:
         elif mode == "JOIN":
             graphicalClient()
     elif game_mode == "STATS":
-        print("Stats")
+        show_stats()
 
     if getText("Play Again? (Y/N)", xpos=50, boxHeight=40, boxWidth=205).upper() == "Y":
         continue

@@ -57,3 +57,9 @@ def getText(message = "", color = (255,0,0), xpos = 100, boxWidth = 100, boxHeig
         text_screen.blit(message_surface, (xpos, 50))
         
         pygame.display.flip()
+
+def show_stats():
+    if __name__ == "update_stats":
+        with open("stats.txt", "r") as stats:
+            stats = stats.read().split("\n")
+            getText(f"{stats[0][0]} wins, {stats[1][0]} losses", xpos=60, boxWidth=180, boxHeight=40)
