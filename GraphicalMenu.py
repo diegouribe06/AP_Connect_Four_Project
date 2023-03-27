@@ -1,5 +1,5 @@
 import pygame
-#PyGame is a library that allows grephics. Not created by me.
+#PyGame is a library that allows graphics. Not created by me.
 
 from GraphicalClient import game as graphicalClient
 #Line 4 imports the client game from the GraphicalClient file
@@ -14,7 +14,7 @@ from update_stats import getText
 #Line 13 imports the custom visual text function from the update_stats file
 
 from update_stats import show_stats
-#Line 16 imports the function to update the stats from the update_stats file
+#Line 16 imports the function to show the stats saved at the stats.txt file
 
 #The code for the main menu is in an infinite loop, so the player can play again without having to re-run the file
 while True:
