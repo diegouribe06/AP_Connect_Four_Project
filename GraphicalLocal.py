@@ -1,10 +1,10 @@
+#Line 2 imports the copy module which is used to make copies of objects. Not created by me
 import copy
-#Line 1 imports the copy module which is used to make copies of objects. Not created by me
+#Line 4 imports pygame, a graphics library. Not created by me
 import pygame
-#Line 3 imports pygame, a graphics library. Not created by me
+#Lines 6 and 7 import the functions to update stats and the custom text function
 from update_stats import update_stats
 from update_stats import getText
-#Lines 5 and 6 import the functions to update stats and the custom text function
 
 #The whole mode is inside a "temporary" function to be able to be called in an infinite loop, so the user can play again without having to go through the menu.
 def tempGame():
@@ -12,7 +12,7 @@ def tempGame():
     player1 = getText("Player 1:")
     player2 = getText("Player 2:", (0, 255, 0))
 
-    #player_turn is used for the logic of the turn system. when it is 0, it's player1's turn and when it's 1, it's player2's turn
+    #player_turn is used for the logic of the turn system. When player_turn is 0, it's player1's turn and when player_turn is 1, it's player2's turn.
     player_turn = 0
 
     #Text is the variable that displays information about the game at the bottom of the screen. It is constantly changed by actions in the game.
@@ -32,7 +32,7 @@ def tempGame():
     row_f = {1:blank, 2:blank, 3:blank, 4:blank, 5:blank, 6:blank}
     row_g = {1:blank, 2:blank, 3:blank, 4:blank, 5:blank, 6:blank}
 
-    #Lines 36 through 43 are used to apply a scale factor to the game window. This can be used to make it bigger and easier to see. The lines are in an infinite loop to make sure that the user enters a valid scale factor
+    #Lines 36 through 43 are used to apply a scale factor to the game window. This can be used to make the game window bigger and easier to see. The lines are in an infinite loop to make sure that the user enters a valid scale factor
     while True:
         #Line 39 is in a try-except block to make sure that the user enters a number. Since pygame works with pixel measurments the scale factor has to be an integer, so the program automaticaly rounds to a whole number.
         try:
@@ -49,10 +49,10 @@ def tempGame():
     #Line 50 initializes pygame, the library used for graphics
     pygame.init()
 
-    #Line 53 tells pygame what font to use for text and the font size. If it does not exist, it uses the system default.
+    #Line 53 tells pygame what font to use for text and the font size. If the font is not installed on the computer, pygame uses the system default font.
     font = pygame.font.SysFont("comic_sans_ms", 25 * scaling)
 
-    #Line 56 is sets the size of the game window, with a little extra added to the height to leave room for a message.
+    #Line 56 sets the size of the game window, with a little extra added to the height to leave room for a message.
     screen = pygame.display.set_mode([max_width, max_height + 50 * scaling])
 
     #The grid_lines function simplifies the pygame.draw.line() function to only the start and endpoints
@@ -67,7 +67,7 @@ def tempGame():
     def get_grid():
         return [row_a, row_b, row_c, row_d, row_e, row_f, row_g]
 
-    #Moves 2 is the function that places the players chip in the grid, using the row parameter.
+    #Moves 2 is the function that places the player's chip in the grid, using the row parameter.
     def moves2(row):
         #Lines 73 and 74 allow the function to check and change both what the text says, and who's turn it is
         nonlocal player_turn
@@ -97,7 +97,7 @@ def tempGame():
                 rows[desired_row][spot] = red
                 break
         
-        #Line 101 compares the grid before a move was attempted to the grid after a move was attempted. If there is a diference, meaning that a chip was successfully placed, the program will continue and change the player's turn.
+        #Line 101 compares the grid before a move was attempted to the grid after a move was attempted. If there is a difference, meaning that a chip was successfully placed, the program will continue and change the player's turn.
         if list(precheck) != get_grid():
             if player_turn == 0:
                 player_turn = 1
@@ -109,7 +109,7 @@ def tempGame():
             #If no change was detected between the old and new grids, the program knows that the row that the player selected is full, and tells the player that they selected an invalid option.
             text = "Invalid Choice"
 
-    #The draw_check() function is used to check if there is a tie. It iterates through the entire grid, and returns false for the first empty spot it finds. If it iterates through the whole grid without finding an empty spot, it returns true.
+    #The draw_check() function is used to check if there is a tie. The function iterates through the entire grid, and returns false for the first empty spot it finds. If draw_check() iterates through the whole grid without finding an empty spot, it returns true.
     def draw_check():
             #Line 115 lets the function edit the game's bottom text if there is a draw.
             nonlocal text
@@ -127,13 +127,13 @@ def tempGame():
             nonlocal text
             #The vert_check() function scans through the grid from down up, left to right, looking for four consecutive, same color chips up and down
             def vert_check(row, additional):
-                #The conditional first checks to see if the spot that it's checking is not blank. The algorithm then checks if four spots in the row parameter are the same. The "additional" paramater shifts the four spots the algorithm is looking at by the specified number. Finally, it returns true if all the "chips" were the same and false if not.
+                #The conditional first checks to see if the spot that it's checking is not blank. The algorithm then checks if four spots in the row parameter are the same. The "additional" paramater shifts the four spots the algorithm is looking at by the specified number. Finally, vert_check() returns true if all the "chips" were the same and false if not.
                 if((row[1 + additional] == yellow) or (row[1 + additional] == red)) and (row[1 + additional] == row[2 + additional]) and (row[2 + additional] == row[3 + additional]) and (row[3 + additional] == row[4 + additional]):
                     return True
                 else:
                     return False
 
-            #The first loop goes through each row, and the second loop moves the "chips" the vert_check() function up 2 times to cover the entire row.
+            #The first loop goes through each row, and the second loop moves the "chips" up 2 times to cover the entire row.
             for row in get_grid():
                 for additional in range(3): #2 added for all up and down
                     if vert_check(row, additional) and player_turn == 1: #Player turn has to be reversed for this conditional, because a previous function changes it before the program can check for wins.
@@ -149,7 +149,7 @@ def tempGame():
                     
             #The horiz_check function scans the grid down-up, left to right for four consecutive, same color chips, left to right
             def horiz_check(additional, vertical):
-                #The "additional" parameter shifts the four chips that the algorithm is looking at right, and the "vertical" parameter shifts the four chips the algorithm is looking at up. 
+                #The "additional" parameter shifts the four chips that the algorithm is looking at to the right, and the "vertical" parameter shifts the four chips the algorithm is looking at towards the top of the grid. 
                 #The if-else statement splices the output of the get_grid() function to the four rows the algorithm needs to look at, based off of the "additional" parameter
                 if additional == 0:
                     check = get_grid()[0:4]
@@ -176,16 +176,16 @@ def tempGame():
                         update_stats("lose")
                         return True
 
-            #The diag_ur_checking() function checks for wins diagonaly in the down-up, left to right direction.
+            #The diag_ur_checking() function checks for wins diagonally from the bottom of the grid to the top, left to right.
             def diag_ur_checking(additional, vertical):
-                #The function creates a "check" list from the outpust of the get_grid() function. The first element in the list starts at the bottom left corner of the area that the algorithm is chacking, then progresively moves up and right one space for the folowing elements.
+                #The function creates a "check" list from the outpust of the get_grid() function. The first element in the list starts at the bottom left corner of the area that the algorithm is checking, then progressively moves up and right one space for the folowing elements.
                 rows = get_grid()
                 check = [rows[additional][vertical], rows[additional + 1][vertical + 1], rows[additional + 2][vertical + 2], rows[additional + 3][vertical + 3]]
-                #The conditional in line 185 first checks if the "spots" aren't empty, and then if the current status of all of the spots are the same. If they are, then the algorithm returns treu, as it detected a winning condition.
+                #The conditional in line 185 first checks if the "spots" aren't empty, and then if the current status of all of the spots are the same. If they are, then the algorithm returns true, as it detected a winning condition.
                 if ((check[0] == red) or (check[0] == yellow)) and ((check[0] == check[1]) and (check[1] == check[2]) and (check[2] == check[3])):
                     return True
                 
-            #The first loop moves the selected spots from left to right, and the second loop moves them down-up. Both the stat updates and the win detection work the same way as before.
+            #The first loop moves the selected spots from left to right, and the second loop moves them from the bottom of the grid towards the top. Both the stat updates and the win detection work the same way as before.
             for additional in range(4):
                 for vertical in range(1, 4):
                     if diag_ur_checking(additional, vertical) and player_turn == 1:
