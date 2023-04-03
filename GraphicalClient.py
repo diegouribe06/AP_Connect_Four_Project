@@ -1,55 +1,20 @@
+#Lines 2 through 4 import modules not made by me
 import copy
 import pygame
-from update_stats import update_stats
 import socket
+#Lines 6 and 7 import custom function from update_stats.
+from update_stats import update_stats
 from update_stats import getText
+#More detailed explanations for algorithms are in GraphicalLocal, as they work the same way here. The diferences are to allow the game to work in a server-client model
 
-# Alt + Z turns text wrap on and off. Use this to make the comments easier to read since python does not support multi-line comments.
-
-#player1 = ''
-#player2 = ''
-#scaling = ''
 def tempGame():
-    def getText(message = "", color = (255,0,0)):
-        pygame.init()
-        text_screen = pygame.display.set_mode([300, 300])
-        font = pygame.font.SysFont("comic_sans_ms", 25)
-        text = ""
-        text_bar = pygame.Rect(0, 250, 300, 100)
-        message_bar = pygame.Rect(100, 50, 100, 25)
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_BACKSPACE:
-                        text = text[:-1]
-                    elif event.key == pygame.K_RETURN:
-                        running = False
-                        pygame.quit()
-                        return text
-                    else:
-                        text += event.unicode
-
-            text_screen.fill((0,0,0))
-            pygame.draw.rect(text_screen, color, text_bar)
-            text_surface = font.render(text, True, (255, 255, 255))
-            text_screen.blit(text_surface, (text_bar.x, text_bar.y))
-            #text_bar.w = max(100, text_surface.get_width() + 10)
-
-            pygame.draw.rect(text_screen, color, message_bar)
-            message_surface = font.render(message, True, (255,255,255))
-            text_screen.blit(message_surface, (100, 50))
-            
-            pygame.display.flip()
-
+    #Line 12 sets the default socket timeout to 45 seconds, so if the user makes a mistake when entering the IP or port, the program will let them try again.
     socket.setdefaulttimeout(45000)
 
+    #line 15 gets the user's name
     player2 = getText("Player 2:")
 
-    #Scaling
+    #Lines 18 through 23 get a scale factor like in GraphicalLocal
     while True:
         try:
             scaling = round(float(getText("Scale: ", (0, 0, 255))))
@@ -57,27 +22,41 @@ def tempGame():
         except:
             text = ("Please enter a valid number.")
 
+    #Line 26 initializes the client socket
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+    #Lines 29 through 47 are in an infinite loop to make sure that the client successfully connects to a game/.
     while True:
+        #Line 31 gets the client IP from the user. The IP is generated in the host game.
         host_ip = getText("What is the host IP?")
-        host_port = int(getText("What is the host port?"))
-        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #print("...Connecting...")
+        #Lines 33 through 38 try to get the client port number from the user. The lines are in an infinite loop to make sure that a valid port is entered.
+        while True:
+            try:
+                host_port = int(getText("What is the host port?"))
+                break
+            except:
+                getText("Invalid Port")
+        #Lines 40 through 47 attempt to connect to the IP and port given to the program.
         try:
+            #If the client successfully connects, the program exits the loop and continues with the game.
             client.connect((host_ip, host_port))
             getText("Connected Successfully!")
             break
         except:
+            #If the client can't connect in 45 seconds, the program will prompt the user to re-enter the IP and port to try again.
             getText("Host took too long to respond. Please check the IP and Port and try again.")
 
-
+    #Line 50 resets the server timeout to None, so the game doesn't close due to inactivity.
     socket.setdefaulttimeout(None)
-    #Initializing the server
+
+    #Lines 53 and 54 recieve and decode the opponents name.
     player1 = client.recv(1024)
     player1 = player1.decode()
     getText(f"Playing against: {player1}")
+    #Line 57 sends the user's name to the opponent.
     client.sendall(bytes(player2, "utf-8"))
 
+    #Lines 60 through 83 create the grid, colors, player turn, and font in the same way as GraphicalLocal.
     player_turn = 0
     text = f"{player1}'s Turn"
 
@@ -103,6 +82,7 @@ def tempGame():
     running = True
     screen = pygame.display.set_mode([max_width, max_height + 50 * scaling])
 
+    #The functions in lines 86 through 93 work the same way as the functions of the same name in GraphicalLocal.
     def grid_lines(x1, y1, x2, y2):
         return [screen, (0,0,255), (x1, y1), (x2, y2), 5]
 
@@ -112,6 +92,7 @@ def tempGame():
     def get_grid():
         return [row_a, row_b, row_c, row_d, row_e, row_f, row_g]
 
+    #The algorithms for moves2 work the same way as the ones in GraphicalLocal. A couple of lines have been added to work with the server-client model
     def moves2(row):
             nonlocal player_turn
             nonlocal text
@@ -122,11 +103,12 @@ def tempGame():
             precheck = copy.deepcopy(rows)
 
             while True:
-                #Code to make sure that the player chose a valid spot to go in
                 while True:
+                    #If it's player one's turn, the program does not allow the user to make a move, as it is not their turn
                     if player_turn == 0:
                         text = f"{player2}'s turn"
                         desired_row = row
+                    #If it's player two's turn, the game allows the player to make a move, and then sends the move to the host (Line 115)
                     elif player_turn == 1:
                         text = f"{player1}'s turn"
                         desired_row = row
@@ -135,31 +117,31 @@ def tempGame():
                         break
                     else:
                         text = ("Invalid Choice")
-                #End of row check section
-                #for row in rows:#This loop is to check in every row
-                for spot in rows[desired_row]: #For every spot in the row, the algoritm checks if there is anything but an empty chip already occupying the spot.
-                    if player_turn == 0 and rows[desired_row][spot] == blank:#If it's player one's turn, the algorithm places an empty chip in the first empty spot
+                
+                for spot in rows[desired_row]: 
+                    #For every spot in the row, the algoritm checks if there is anything but an empty chip already occupying the spot.
+                    if player_turn == 0 and rows[desired_row][spot] == blank:
+                        #If it's player one's turn, the algorithm places an empty chip in the first empty spot
                         rows[desired_row][spot] = yellow
                         break
-                    elif player_turn == 1 and rows[desired_row][spot] == blank:#If it's player two's turn, it'll place a red chip instead.
+                    elif player_turn == 1 and rows[desired_row][spot] == blank:
+                        #If it's player two's turn, it'll place a red chip instead.
                         rows[desired_row][spot] = red
                         break
                 
-                if list(precheck) != get_grid(): #Bug: when the conditional calls precheck, precheck calls the "get_grid()" function again inside the conditional. When this happens, a condition that is always true occurs, and that breaks the logic that checks for a difference in the grid before a turn was made.
+                if list(precheck) != get_grid():
 
                     if player_turn == 0:
                         player_turn = 1
                     elif player_turn == 1:
                         player_turn = 0
 
-                    break #This if block checks to make sure there was a change in the board. "precheck" was initiallized earlier to check for a change before the move is made.
-
-                #Once the change is detected, it breaks out of the while true loop, to make sure that the same player doesn't get locked making all the moves.
+                    break 
                 else:
                     text = "Invalid Choice"
                     break
                     #Finally, no matter the turn, if the algorithm reaches the end, it'll ask the player to choose a different row since the chosen one is full.
-
+    #The draw_check and win_check functions work the same way as the functions found in GraphicalLocal
     def draw_check():
             nonlocal row_a, row_b, row_c, row_d, row_e, row_f, row_g, blank
             nonlocal text
@@ -178,22 +160,15 @@ def tempGame():
             nonlocal red
             nonlocal blank
 
-            #Vertical checking from down up, and left to right
-            def update_rows(r = True): #Used to make sure that the rows in the function are accurate.
-                nonlocal row_a, row_b, row_c, row_d, row_e, row_f, row_g
-                rows = [row_a, row_b, row_c, row_d, row_e, row_f, row_g]
-                if r == True:
-                    return rows
-                
-            def vert_check(row, additional): #Checks the verticals. The "... == yellow" and "...== red" is to make sure that the algorithm isn't set off by the blank pieces.
+            def vert_check(row, additional):
                 if((row[1 + additional] == yellow) or (row[1 + additional] == red)) and (row[1 + additional] == row[2 + additional]) and (row[2 + additional] == row[3 + additional]) and (row[3 + additional] == row[4 + additional]):
                     return True
                 else:
                     return False
 
-            for row in update_rows(): #7 left and right
-                for additional in range(3): #2 added for all up and down
-                    if vert_check(row, additional) and player_turn == 1: #Player turn has to be reversed for this conditional, because a previous function changes it before the program can check for wins.
+            for row in get_grid():
+                for additional in range(3):
+                    if vert_check(row, additional) and player_turn == 1:
                         text = f'{player1} Wins!'
                         update_stats("win")
                         return True
@@ -201,20 +176,18 @@ def tempGame():
                         text = f'{player2} Wins!'
                         update_stats("lose")
                         return True
-            #End of vertical checking
-            #Start of horizontal checking
+
             def horiz_check(additional, horizontal):
-                #Saves the rows that will be checked as "check"
                 if additional == 0:
-                    check = update_rows()[0:4]
+                    check = get_grid()[0:4]
                 elif additional == 1:
-                    check = update_rows()[1:5]
+                    check = get_grid()[1:5]
                 elif additional == 2:
-                    check = update_rows()[2:6]
+                    check = get_grid()[2:6]
                 elif additional == 3:
-                    check = update_rows()[3:7]
+                    check = get_grid()[3:7]
                 if ((check[0][horizontal] == yellow) or (check[0][horizontal] == red)) and ((check[0][horizontal] == check[1][horizontal]) and (check[1][horizontal] == check[2][horizontal]) and (check[2][horizontal] == check[3][horizontal])):
-                    return True #This checks to make sure that everything in the check list is the same. Horizantal is used to move the selection band up.
+                    return True
             
             for additional in range(4):
                 for horizontal in range(1, 7):
@@ -226,10 +199,9 @@ def tempGame():
                         text = (f'{player2} Wins!')
                         update_stats("lose")
                         return True
-            #End of horizontal checking
-            #Start of diagonal up,right checking
+
             def diag_ur_checking(additional, horizontal):
-                rows = update_rows()
+                rows = get_grid()
                 check = [rows[additional][horizontal], rows[additional + 1][horizontal + 1], rows[additional + 2][horizontal + 2], rows[additional + 3][horizontal + 3]]
                 if ((check[0] == red) or (check[0] == yellow)) and ((check[0] == check[1]) and (check[1] == check[2]) and (check[2] == check[3])):
                     return True
@@ -243,10 +215,9 @@ def tempGame():
                         text = (f'{player2} Wins!')
                         update_stats("lose")
                         return True
-            #End of diagonal up,right checking
-            #Start of diagonal up left checking
+
             def diag_ul_checking(additional, horizontal):
-                rows = update_rows()
+                rows = get_grid()
                 check = [rows[additional][horizontal + 3], rows[additional + 1][horizontal + 2], rows[additional + 2][horizontal + 1], rows[additional + 3][horizontal]]
                 if ((check[0] == red) or (check[0] == yellow)) and ((check[0] == check[1]) and (check[1] == check[2]) and (check[2] == check[3])):
                     return True
@@ -260,7 +231,8 @@ def tempGame():
                         text = (f'{player2} Wins!')
                         update_stats("lose")
                         return True
-
+    
+    #The win variable is used to update the screen a final time after a player wins.
     win = False
 
     while running:
@@ -276,11 +248,13 @@ def tempGame():
 
         screen.fill((0,0,0)) #Sets the background
 
+        #Lines 252 through 255 set the text in the bottom bar
         message = font.render(text, True, (255, 255, 255), (0, 0, 0))
         message_rect = message.get_rect()
         message_rect.center = (((max_width / 2)), (max_height + 25 * scaling))
         screen.blit(message, message_rect)
         
+        #If it's player two's turn, the program will allow the user to make a move, and then send it to the host in moves2
         if player_turn == 1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -293,12 +267,11 @@ def tempGame():
                         moves2(i)
                         #text = (get_grid())
                     counter += 50 * scaling
+        #If it's player one's turn, the program will not allow the user to make a move, as it is not their turn. The program will also wait for the host program to send its move (Line 272)
         elif player_turn == 0:
             moves2(int((client.recv(1024)).decode("utf-8")))
 
-
-
-
+        #Lines 275 through 292 draw the grid the same way as in GraphicalLocal.
         tracker = 50 * scaling
         for i in range(6):
             pygame.draw.line(*grid_lines(tracker, 0, tracker, max_height))
@@ -318,14 +291,14 @@ def tempGame():
                 v_counter -= 50 * scaling
             h_counter += 50 * scaling
         
-
-
-
+        #The conditional to detect wins or draws also works the same way as the one in GraphicalLocal. The additional line (Line 297) closes the socket to preserve resources.
         if draw_check() or win_check():
             win = True
             client.close()
+    #Finally, when the game is over, the program closes the graphics module to preserve resources.
     pygame.quit()
 
+#The tempGame function is placed inside a seperate function for instant replayability, like in GraphicalLocal.
 def game():
     import pygame
     while True:
@@ -334,6 +307,3 @@ def game():
             continue
         else:
             break
-
-if __name__ == "__GraphicalClient__":
-        game()

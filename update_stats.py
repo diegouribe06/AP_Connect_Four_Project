@@ -1,4 +1,9 @@
+#Line one imports pygame, a graphics library not made by me.
 import pygame
+
+#This file contains functions used by multiple files.
+
+#Update stats is used to update the stats.txt file
 def update_stats(check, debug = False):
     if check == "win":
         with open("stats.txt") as stats:
@@ -23,6 +28,7 @@ def update_stats(check, debug = False):
             reset = "0 wins\n0losses"
             stats.write(reset)
 
+#getText is used to get a text input from the user, or to display a message.
 def getText(message = "", color = (255,0,0), xpos = 100, boxWidth = 100, boxHeight = 25):
     pygame.init()
     text_screen = pygame.display.set_mode([300, 300])
