@@ -18,7 +18,7 @@ def tempGame():
             scaling = round(float(getText("Scale: ", (0, 0, 255))))
             break
         except:
-            getText("Please enter a valid number.")
+            pass
 
     #Lines 24 through 38 get the computer's LAN ip address. This is used so the client can connect to it.
     #Line 25 creates a "dummy" socket. The computer's IP address will be read from the logs of the socket.
@@ -44,7 +44,7 @@ def tempGame():
     host = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     #Line 47 displays the IP to the user, so they can give it to the second player ot connect.
-    getText(f"IP is {host_ip}")
+    getText(f"IP: {host_ip}", xpos=50, boxWidth=200)
 
     #Lines 50 through _ are in an infinite loop to insure that a valid, unused port is chosen.
     while True:
@@ -52,10 +52,10 @@ def tempGame():
         while True:
             #Line 55 will try to get a port number from the user.
             try:
-                port = int(getText("Choose a port: (Number between 1024 and 65536)"))
+                port = int(getText("Port?"))
             #If the user does not enter a number for the port, the program will prompt them to enter a valid number in line 58
             except:
-                getText("Please enter a valid number")
+                getText("Invalid Port")
 
             #If the user entered a number for the port, the program will then check if the port is within the valid range in line 61.
             if port > 1024 and port < 65536:
@@ -63,7 +63,7 @@ def tempGame():
                 break
             else:
                 #If the user did not enter a port in the valid range, the program will prompt them to try again (Line 66)
-                getText("Please select a valid port number.")
+                getText("Invalid Port")
 
         #In lines 69 through 73, the program will attempt to create a socket on the specified port.
         try:
@@ -72,12 +72,12 @@ def tempGame():
             break
         except:
             #If the port could not be created, that means that the port the user chose is currently in use by a different program. The program will then tell the user to choose a different port. (Line 75)
-            getText("The port is currently in use. Please select another port.")
+            getText("Invalid Port")
 
     #In lines 78 through 80, the server will listen for incoming connections. When a connection is found, the program will tell the user that the server was able to connect.
     host.listen()
     connection, address = host.accept()
-    getText("Connected Successfully!")
+    getText("Connected!", xpos=85, boxWidth=130)
 
     #The program will send the user's name to the client in line 83
     connection.sendall(bytes(player1, "utf-8"))
@@ -85,7 +85,7 @@ def tempGame():
     player2 = connection.recv(1024)
     player2 = player2.decode("utf-8")
     #Line 88 will tell the user who they're playing against
-    getText(f"Playing against {player2}")
+    getText(f"Playing against: {player2}", xpos=20, boxWidth=260)
 
     #Same as in GraphicalLocal, lines 91 through 113 set the player's turn, the colors, the grid, the screen size, and the font to be used
     player_turn = 0

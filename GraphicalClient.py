@@ -40,7 +40,7 @@ def tempGame():
         try:
             #If the client successfully connects, the program exits the loop and continues with the game.
             client.connect((host_ip, host_port))
-            getText("Connected!")
+            getText("Connected!", xpos=85, boxWidth=130)
             break
         except:
             #If the client can't connect in 45 seconds, the program will prompt the user to re-enter the IP and port to try again.
@@ -52,7 +52,7 @@ def tempGame():
     #Lines 53 and 54 recieve and decode the opponents name.
     player1 = client.recv(1024)
     player1 = player1.decode()
-    getText(f"Playing against: {player1}")
+    getText(f"Playing against: {player1}", xpos=20, boxWidth=260)
     #Line 57 sends the user's name to the opponent.
     client.sendall(bytes(player2, "utf-8"))
 
