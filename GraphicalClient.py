@@ -20,7 +20,7 @@ def tempGame():
             scaling = round(float(getText("Scale: ", (0, 0, 255))))
             break
         except:
-            text = ("Please enter a valid number.")
+            pass
 
     #Line 26 initializes the client socket
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,23 +28,23 @@ def tempGame():
     #Lines 29 through 47 are in an infinite loop to make sure that the client successfully connects to a game/.
     while True:
         #Line 31 gets the client IP from the user. The IP is generated in the host game.
-        host_ip = getText("What is the host IP?")
+        host_ip = getText("Host IP?", xpos=98, boxWidth=102)
         #Lines 33 through 38 try to get the client port number from the user. The lines are in an infinite loop to make sure that a valid port is entered.
         while True:
             try:
-                host_port = int(getText("What is the host port?"))
+                host_port = int(getText("Host Port?", xpos= 85, boxWidth=130))
                 break
             except:
-                getText("Invalid Port")
+                getText("Invalid Port",xpos=80, boxWidth=140)
         #Lines 40 through 47 attempt to connect to the IP and port given to the program.
         try:
             #If the client successfully connects, the program exits the loop and continues with the game.
             client.connect((host_ip, host_port))
-            getText("Connected Successfully!")
+            getText("Connected!")
             break
         except:
             #If the client can't connect in 45 seconds, the program will prompt the user to re-enter the IP and port to try again.
-            getText("Host took too long to respond. Please check the IP and Port and try again.")
+            getText("Timeout Error", xpos=60, boxWidth=180)
 
     #Line 50 resets the server timeout to None, so the game doesn't close due to inactivity.
     socket.setdefaulttimeout(None)

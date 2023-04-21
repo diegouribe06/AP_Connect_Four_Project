@@ -40,7 +40,7 @@ def tempGame():
             break
         except:
             #If the user enters a string, the program will tell them to enter a valid number and prompt them to enter the scale factor again.
-            getText("Please enter a valid number.")
+            getText("Enter a valid number", boxHeight=40, xpos=30, boxWidth=245)
 
     #300 * 350 is the default size of the game. If the user enters a scale factor other than one, the size is increases by that factor. 
     max_height = 300 * scaling
@@ -136,7 +136,7 @@ def tempGame():
             #The first loop goes through each row, and the second loop moves the "chips" up 2 times to cover the entire row.
             for row in get_grid():
                 for additional in range(3): #2 added for all up and down
-                    if vert_check(row, additional) and player_turn == 1: #Player turn has to be reversed for this conditional, because a previous function changes it before the program can check for wins.
+                    if vert_check(row, additional) and player_turn == 1:
                         text = f'{player1} Wins!'
                         #If player1 wins, the program adds one win to the stats
                         update_stats("win")

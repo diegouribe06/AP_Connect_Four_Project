@@ -39,7 +39,7 @@ def update_stats(check, debug = False):
 
 #getText is used to get a text input from the user, or to display a message.
 #The message parameter is the message displayed by the program, color changes the color of the highlight, xpos changes where the text appears, boxWidth and boxHeight change the sizwe of the highlight
-def getText(message = "", color = (255,0,0), xpos = 100, boxWidth = 100, boxHeight = 25):
+def getText(message = "", color = (255,0,0), xpos = 100, boxWidth = 100, boxHeight = 40):
     #Line 43 initializes the graphical library, pygame
     pygame.init()
     #Lines 46 and 47 set the size of the window and the font to be used.
